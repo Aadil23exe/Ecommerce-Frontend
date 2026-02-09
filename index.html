@@ -5,11 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Commerce Frontend</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Online Store</h1>
-    </header>
-    <script src="scripts/app.js"></script>
+    <div class="container">
+                <header>
+                <div class="logo">
+                    <img src="assets/logo.png" alt="Store Logo" class="logo-image" loading="lazy">
+                </div>
+
+                <input type="checkbox" id="menu-toggle">
+                <label for="menu-toggle" class="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
+
+                <div class="nav">
+                    <div class="home nav-element"><p><a href="#home">Home</a></p></div>
+                    <div class="Products nav-element"><p><a href="products.html">Products</a></p></div>
+                    <div class="About nav-element"><p><a href="#about">About</a></p></div>
+                    <div class="Contact nav-element"><p><a href="#contact">Contact</a></p></div>
+                </div>
+                <form>
+                    <input type="search" placeholder="Search products..." class="search-bar">
+                </form>
+                <div class="carticon">
+                    <i class="fa-solid fa-cart-arrow-down"></i>
+                </div>
+            </header>
+            <div class="herosection">
+                <div class="hero-content">
+                    <h1>
+                        Shop the Latest <br>
+                        <span>Electronics & Gadgets</span>
+                    </h1>
+                    <p>
+                        Discover the best deals on top electronics, gadgets, and accessories all in one place.
+                    </p>
+                    <a href="products.html" class="hero-btn">Shop Now</a>
+                </div>
+            </div>
+            <div class="container">
+                <h2>Featured Categories</h2>
+            <div class="categories">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Laptops" loading="lazy">
+                    <h3>Apparels</h3>
+                    <p>Discover the latest trends in fashion and style.</p>
+                    <a href="apparel.html" class="category-btn">Shop Now</a>
+                </div>
+
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Smartphones" loading="lazy">
+                    <h3>Electronics</h3>
+                    <p>Latest electronics with cutting-edge technology.</p>
+                    <a href="electronics.html" class="category-btn">Shop Now</a>
+                </div>
+
+                <div class="category-card">
+                    <img src="https://plus.unsplash.com/premium_photo-1661645433820-24c8604e4db5?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Accessories" loading="lazy">
+                    <h3>Accessories</h3>
+                    <p>Essential accessories to enhance and protect your devices.</p>
+                    <a href="jewelry.html" class="category-btn">Shop Now</a>
+                </div>
+                </div>
+                </div>  
+
+        <script src="scripts/app.js"></script>
+    </div>
 </body>
 </html>

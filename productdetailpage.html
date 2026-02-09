@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail</title>
+    <script src="scripts/app.js">
+            fetch('https://fakestoreapi.com/products')
+        .then(response => response.json())
+        .then(data => {
+            mydata = data;
+            
+            
+        });
+        function getProductDetails() {
+                const urlParams = new URLSearchParams(window.location.search);
+                const productId = urlParams.get('id');
+                const product = mydata.find(item => item.id == productId);
+                if (product) {
+                    document.querySelector('.container').innerHTML = `
+                        <div class="product-detail">
+                            <img src="${product.image}" alt="${product.title}" loading="lazy">
+                            <h1>${product.title}</h1>
+                            <p>${product.description}</p>
+                            <span>$${product.price}</span>
+                            <button id=${product.id} onClick='addToCart(${product.id})'>Add to Cart</button>
+                        </div>
+                    `;
+                } else {
+                    document.querySelector('.container').innerHTML = `<p>Product not found.</p>`;
+                }
+    }
+</script>
+</head>
+<body>
+    <div class="container">
+       
+    </div>
+</body>
+</html>

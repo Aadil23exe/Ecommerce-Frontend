@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="scripts/app.js"></script>
+    <style>
+        *
+        {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 5px;
+            font-family: Arial, sans-serif;
+        }
+        .container
+        {
+            width: 90%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .row
+        {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .card
+        {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            width: 270px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card:hover
+        {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+            border:#5a4de0 1px solid;
+        }
+
+        .card img
+        {
+            max-width: 100%;
+            height: 200px;
+            margin-bottom: 10px;
+        }
+
+        .card h2 {
+            font-size: 0.9em;
+            margin-bottom: 10px;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 3;
+            overflow: hidden;
+        }
+
+        .card span
+        {
+            font-size: 1.2em;
+            color: #333;
+            margin-top: auto;
+            margin-bottom: 10px;
+        }
+
+        .card button
+        {
+            padding: 10px 15px;
+            background-color: #7363ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            margin-top: auto;
+        }
+
+        .card button:hover
+        {
+            background-color: #5a4de0;
+        }
+    </style>
+    <script>
+        
+        fetch('https://fakestoreapi.com/products')
+        .then(response => response.json())
+        .then(data => {
+            displayProducts(data);
+        });
+        
+        function displayProducts(data) {
+            data.forEach(element => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${element.image}" alt="${element.title} loading="lazy"">
+                    <a href="productdetailpage.html?id=${element.id}"><h2>${element.title}</h2></a>
+                    <span>$${element.price}</span>
+                    <button id=${element.id} onClick='addToCart(${element.id})'>Add to Cart</button>
+                `;
+                document.querySelector('.container .row').appendChild(card);
+            });
+        }
+    
+
+
+    </script>
+    <title>Products</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row"></div>
+    </div>
+</body>
+</html>

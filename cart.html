@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+</head>
+<style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body {
+  background: #f5f6fa;
+  padding: 20px;
+}
+.container h1 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#cart-items {
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.cart-item {
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: 80px 1fr auto auto;
+  align-items: center;
+  gap: 14px;
+  border: 1px solid #e5e7eb;
+  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+.cart-item:hover {
+  background: #f4f3ff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
+  border: 1px solid #5a4de0;
+}
+
+.cart-item img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  background: #f8f9fd;
+  border-radius: 4px;
+}
+
+.cart-item h2 {
+  font-size: 14px;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item span {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2d6cdf;
+  text-align: right;
+}
+
+.cart-item button {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 4px;
+  background: #7363ff;
+  color: #fff;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cart-item button:hover {
+  background: #5a4de0;
+}
+
+@media (max-width: 768px) {
+  .cart-item {
+    grid-template-columns: 60px 1fr auto auto;
+  }
+}
+</style>
+<script src="scripts/app.js">
+</script>
+<script>
+   document.addEventListener("DOMContentLoaded", viewCart);
+</script>
+<body>
+    <div class="container">
+      <h1 style="text-align:center; margin-bottom:20px;">My Cart</h1>
+      <ol>
+         <div id="cart-items">
+            </div>
+        </ol>
+      </div>
+    </div>
+</body>
+
+</html>
