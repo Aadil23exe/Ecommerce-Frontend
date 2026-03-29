@@ -6,92 +6,403 @@
     <title>My Cart</title>
 </head>
 <style>
-    * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
-  background: #f5f6fa;
-  padding: 20px;
+    background: #f2f3f7;
 }
-.container h1 {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 20px;
-  text-align: center;
+
+.container {
+    max-width: 950px;
+    margin: 2% auto;
+    padding: 0 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 26px;
+    font-weight: 600;
+  
+}
+
+ol {
+    list-style: none;
 }
 
 #cart-items {
-  max-width: 1100px;
-  margin: auto;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 }
 
 .cart-item {
-  background: #ffffff;
-  border-radius: 6px;
-  padding: 10px 14px;
-  display: grid;
-  grid-template-columns: 80px 1fr auto auto;
-  align-items: center;
-  gap: 14px;
-  border: 1px solid #e5e7eb;
-  transition: background 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-  cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 22px 28px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    transition: 0.2s ease;
 }
+
 .cart-item:hover {
-  background: #f4f3ff;
-  box-shadow: 0 6px 12px rgba(0,0,0,0.12);
-  transform: translateY(-2px);
-  border: 1px solid #5a4de0;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-.cart-item img {
-  width: 70px;
-  height: 70px;
-  object-fit: contain;
-  background: #f8f9fd;
-  border-radius: 4px;
+.cart-left {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex: 1;
 }
 
-.cart-item h2 {
-  font-size: 14px;
-  color: #222;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.cart-left img {
+    width: 85px;
+    height: 85px;
+    object-fit: contain;
+    background: #f7f7f7;
+    padding: 12px;
+    border-radius: 10px;
 }
 
-.cart-item span {
-  font-size: 15px;
-  font-weight: 600;
-  color: #2d6cdf;
-  text-align: right;
+.cart-left h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #222;
 }
 
-.cart-item button {
-  padding: 6px 10px;
-  border: none;
-  border-radius: 4px;
-  background: #7363ff;
-  color: #fff;
-  font-size: 13px;
-  cursor: pointer;
+.cart-left p {
+    font-size: 14px;
+    color: #666;
+    margin: 2px 0;
 }
 
-.cart-item button:hover {
-  background: #5a4de0;
+.cart-right {
+    display: flex;
+    align-items: center;
+    gap: 35px;
+}
+
+.price-box {
+    font-size: 16px;
+    font-weight: 600;
+    min-width: 90px;
+    text-align: right;
+}
+
+.qty-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-control button {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    background: #6c63ff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.qty-control span {
+    width: 30px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.remove-btn {
+    background: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.cart-summary {
+    margin-top: 40px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-summary h2 {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.cart-summary button {
+    padding: 12px 22px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.cart-summary button:first-child {
+    background: #e0e0e0;
+}
+
+#checkout-btn {
+    background: #6c63ff;
+    color: white;
+}
+
+#checkout-btn:disabled {
+    background: #bbb;
+    cursor: not-allowed;
 }
 
 @media (max-width: 768px) {
-  .cart-item {
-    grid-template-columns: 60px 1fr auto auto;
-  }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 18px;
+        gap: 18px;
+    }
+
+    .cart-left {
+        width: 100%;
+        gap: 15px;
+    }
+
+    .cart-left img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .cart-left h3 {
+        font-size: 15px;
+    }
+
+    .cart-right {
+        width: 100%;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .qty-control {
+        justify-content: center;
+    }
+
+    .cart-right p {
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .remove-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cart-summary {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+        text-align: center;
+    }
+
+    .cart-summary button {
+        width: 100%;
+    }
+}
+
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4caf50;
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 8px;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.35s ease;
+    z-index: 9999;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: #ffffff;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    position: relative;
+    z-index: 100;
+    margin: 0px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+}
+
+.nav {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-element {
+    cursor: pointer;
+    position: relative;
+    
+}
+
+.nav-element p {
+    font-size: 15px;
+    font-weight: 500;
+    color: #333;
+    transition: color 0.3s ease;    
+}
+
+.nav-element a {
+    text-decoration: none;
+}
+
+.nav-element::after {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 2px;
+    background: #2563eb;
+    left: 0;
+    bottom: -6px;
+    transition: width 0.3s ease;
+}
+
+.nav-element:hover::after {
+    width: 100%;
+}
+
+.nav-element:hover p {
+    color: #2563eb;
+}
+
+.search-bar {
+    padding: 8px 14px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    outline: none;
+    width: 300px;
+    transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.carticon {
+    font-size: 25px;
+    color: #333;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.carticon:hover {
+    color: #2563eb;
+    transform: scale(1.1);
+}
+
+.hamburger {
+    display: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #333;
+}
+
+#menu-toggle {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .hamburger {
+        display: block;
+    }
+
+    .nav {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        flex-direction: column;
+        align-items: center;
+        gap: 18px;
+        padding: 20px 0;
+        display: none;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        animation: slideDown 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+        opacity: 0;
+    }
+    .nav.nav-open {
+        max-height: 400px;
+        opacity: 1;
+    }
+    .search-bar{
+       width: 100%;
+    }
+    }
+
+    #menu-toggle:checked ~ .nav {
+        display: flex;
+    }
+
+    .nav-element::after {
+        display: none;
+    }
+    
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 </style>
 <script src="scripts/app.js">
@@ -100,6 +411,26 @@ body {
    document.addEventListener("DOMContentLoaded", viewCart);
 </script>
 <body>
+    <header>
+                <div class="logo">
+                    <img src="assets/logo.webp" alt="Store Logo" class="logo-image" loading="lazy">
+                </div>
+
+                <input type="checkbox" id="menu-toggle">
+                <label for="menu-toggle" class="hamburger">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
+
+                <div class="nav">
+                    <div class="home nav-element"><p><a href="index.html">Home</a></p></div>
+                    <div class="Products nav-element"><p><a href="products.html">Products</a></p></div>
+                    <div class="About nav-element"><p><a href="about.html">About</a></p></div>
+                    <div class="Contact nav-element"><p><a href="contact.html">Contact</a></p></div>
+                </div>
+                <form>
+                    <input type="search" placeholder="Search products..." class="search-bar">
+                </form>
+            </header>
     <div class="container">
       <h1 style="text-align:center; margin-bottom:20px;">My Cart</h1>
       <ol>
@@ -107,6 +438,7 @@ body {
             </div>
         </ol>
       </div>
+      <div id="toast" class="toast"></div>
     </div>
 </body>
 

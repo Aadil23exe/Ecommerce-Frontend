@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="scripts/app.js"></script>
+    <script src="scripts/app.js" defer></script>
     <style>
         *
         {
@@ -84,6 +84,27 @@
         {
             background-color: #5a4de0;
         }
+        .toast{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#4caf50;
+color:#fff;
+padding:14px 22px;
+border-radius:8px;
+font-weight:600;
+opacity:0;
+transform:translateY(20px);
+transition:.35s ease;
+z-index:9999;
+box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+
+.toast.show{
+opacity:1;
+transform:translateY(0);
+}
+        
     </style>
     <script>
         
@@ -93,19 +114,38 @@
             displayProducts(data);
         });
         
-        function displayProducts(data) {
-            data.forEach(element => {
+            function displayProducts(data) {
+            data.forEach(product => {
                 const card = document.createElement('div');
                 card.className = 'card';
+
                 card.innerHTML = `
-                    <img src="${element.image}" alt="${element.title} loading="lazy"">
-                    <a href="productdetailpage.html?id=${element.id}"><h2>${element.title}</h2></a>
-                    <span>$${element.price}</span>
-                    <button id=${element.id} onClick='addToCart(${element.id})'>Add to Cart</button>
+                    <img src="${product.image}" alt="${product.title}" loading="lazy">
+                    <h2>${product.title}</h2>
+                    <span>$${product.price}</span>
+                    <button onclick="event.stopPropagation(); addToCart(${product.id}, true)">
+                        Add to Cart
+                    </button>
                 `;
-                document.querySelector('.container .row').appendChild(card);
+
+                card.onclick = () => {
+                    localStorage.setItem(
+                        "selected_product",
+                        JSON.stringify(product)
+                    );
+                    window.location.href = "productdetailpage.html";
+                };
+
+                document.querySelector('.row').appendChild(card);
             });
         }
+            card.onclick = () => {
+            localStorage.setItem(
+                "selected_product",
+                JSON.stringify(product)
+            );
+            window.location.href = "productdetailpage.html";
+        };
     
 
 
@@ -115,6 +155,7 @@
 <body>
     <div class="container">
         <div class="row"></div>
+        <div id="toast" class="toast"></div>
     </div>
 </body>
 </html>

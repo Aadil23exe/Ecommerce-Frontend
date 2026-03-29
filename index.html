@@ -11,7 +11,7 @@
     <div class="container">
                 <header>
                 <div class="logo">
-                    <img src="assets/logo.png" alt="Store Logo" class="logo-image" loading="lazy">
+                    <img src="assets/logo.webp" alt="Store Logo" class="logo-image" loading="lazy">
                 </div>
 
                 <input type="checkbox" id="menu-toggle">
@@ -22,15 +22,22 @@
                 <div class="nav">
                     <div class="home nav-element"><p><a href="#home">Home</a></p></div>
                     <div class="Products nav-element"><p><a href="products.html">Products</a></p></div>
-                    <div class="About nav-element"><p><a href="#about">About</a></p></div>
-                    <div class="Contact nav-element"><p><a href="#contact">Contact</a></p></div>
+                    <div class="About nav-element"><p><a href="about.html">About</a></p></div>
+                    <div class="Contact nav-element"><p><a href="contact.html">Contact</a></p></div>
                 </div>
                 <form>
                     <input type="search" placeholder="Search products..." class="search-bar">
                 </form>
-                <div class="carticon">
+               <div class="carticon">
+                <a href="cart.html" class="cart-link">
                     <i class="fa-solid fa-cart-arrow-down"></i>
-                </div>
+                    <span id="cart-count" class="cart-badge">0</span>
+                </a>
+            </div>
+           <div class="user-auth">
+            <p id="userEmail"></p>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
             </header>
             <div class="herosection">
                 <div class="hero-content">
@@ -71,6 +78,44 @@
                 </div>  
 
         <script src="scripts/app.js"></script>
+        <div id="toast" class="toast"></div>
     </div>
 </body>
+<script type="module">
+
+import { auth } from "./firebase.js";
+import { onAuthStateChanged, signOut } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+window.logout = function () {
+
+  signOut(auth)
+  .then(() => {
+
+    alert("Logged Out Successfully");
+
+    window.location.href = "login.html";
+
+  });
+
+};
+
+onAuthStateChanged(auth, (user) => {
+
+  if (user) {
+
+    console.log("User logged in:", user.email);
+
+    document.getElementById("userEmail").innerText =
+    "Welcome: " + user.email;
+
+  } else {
+
+    window.location.href = "login.html";
+
+  }
+
+});
+
+</script>
 </html>

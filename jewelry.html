@@ -84,6 +84,7 @@
             background-color: #5a4de0;
         }
     </style>
+    <script src="scripts/app.js" defer></script>
     <script>
         fetch('https://fakestoreapi.com/products')
         .then(response => response.json())
@@ -93,22 +94,33 @@
 
         
         function displayProducts(data) {
-            data.forEach(element => {
-                
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                    <img src="${element.image}" alt="${element.title}">
-                    <h2>${element.title}</h2>
-                    <span>$${element.price}</span>
-                    <button id=${element.id}>Add to Cart</button>
-                `;
-                if (element.category === "jewelery") {
-                    document.querySelector('.container .row').appendChild(card);
-                }
-                
-            });
+    data.forEach(product => {
+
+        if (product.category === "jewelery") {
+
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            card.innerHTML = `
+                <img src="${product.image}" alt="${product.title}" loading="lazy">
+                <h2>${product.title}</h2>
+                <span>$${product.price}</span>
+                <button onclick="event.stopPropagation(); addToCart(${product.id}, true)">
+                    Add to Cart
+                </button>
+            `;
+            card.onclick = () => {
+                localStorage.setItem(
+                    "selected_product",
+                    JSON.stringify(product)
+                );
+                window.location.href = "productdetailpage.html";
+            };
+
+            document.querySelector('.row').appendChild(card);
         }
+    });
+}
     
 
     </script>

@@ -2,39 +2,548 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product Detail</title>
-    <script src="scripts/app.js">
-            fetch('https://fakestoreapi.com/products')
-        .then(response => response.json())
-        .then(data => {
-            mydata = data;
-            
-            
-        });
-        function getProductDetails() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const productId = urlParams.get('id');
-                const product = mydata.find(item => item.id == productId);
-                if (product) {
-                    document.querySelector('.container').innerHTML = `
-                        <div class="product-detail">
-                            <img src="${product.image}" alt="${product.title}" loading="lazy">
-                            <h1>${product.title}</h1>
-                            <p>${product.description}</p>
-                            <span>$${product.price}</span>
-                            <button id=${product.id} onClick='addToCart(${product.id})'>Add to Cart</button>
-                        </div>
-                    `;
-                } else {
-                    document.querySelector('.container').innerHTML = `<p>Product not found.</p>`;
-                }
-    }
-</script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Load JS properly -->
+    <script src="scripts/app.js" defer></script>
+
+    <style>
+        /* your existing CSS stays SAME */
+    </style>
 </head>
+<style>
+    * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+    background: #f1f3f6;
+    padding: 30px;
+    }
+
+    .container {
+    max-width: 1200px;
+    margin: auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .product-detail {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 40px;
+    transition: all .35s ease;
+    }
+    .product-info{
+    transition: transform .35s ease, opacity .25s ease;
+    }
+
+    .product-detail.zoom-active .product-info{
+        transform: translateX(40px);
+        opacity: 0;
+        pointer-events: none;
+    }
+    .product-detail img {
+    width: 100%;
+    height: 420px;
+    object-fit: contain;
+    border: 1px solid #ddd;
+    padding: 20px;
+    background: #fff;
+    }
+
+    .product-detail h1 {
+    font-size: 26px;
+    font-weight: 600;
+    color: #212121;
+    margin-bottom: 15px;
+    }
+
+    .product-detail p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 20px;
+    }
+
+    .product-detail span {
+    display: block;
+    font-size: 28px;
+    font-weight: 600;
+    color: green;
+    margin-bottom: 25px;
+    }
+
+    .product-detail button {
+    background: #5a4de0;
+    border: 1px solid #7363ff;
+    padding: 14px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    width: 200px;
+    color: #fff;
+    }
+
+    .product-detail button:hover {
+    background: #7363ff;
+    }
+
+    @media (max-width: 900px) {
+    .product-detail {
+        grid-template-columns: 1fr;
+    }
+
+    .product-detail img {
+        height: 320px;
+    }
+    }
+    .image-section{
+position:relative;
+display:flex;
+gap:20px
+}
+
+.image-wrapper{
+position:relative;
+width:420px;
+height:420px;
+border:1px solid #ddd;
+background:#fff;
+overflow:hidden;
+cursor:crosshair
+}
+
+.image-wrapper img{
+width:100%;
+height:100%;
+object-fit:contain;
+display:block
+}
+
+.lens{
+position:absolute;
+width:150px;
+height:150px;
+border:2px solid #7363ff;
+background:rgba(115,99,255,.2);
+display:none;
+pointer-events:none
+}
+
+.zoom-preview{
+width:420px;
+height:420px;
+border:1px solid #ddd;
+background-repeat:no-repeat;
+background-color:#fff;
+display:none
+}
+
+.product-detail h1{
+font-size:26px;
+font-weight:600;
+color:#212121;
+margin-bottom:15px
+}
+
+.product-detail p{
+font-size:15px;
+line-height:1.6;
+color:#555;
+margin-bottom:20px
+}
+
+.product-detail span{
+display:block;
+font-size:28px;
+font-weight:600;
+color:green;
+margin-bottom:25px
+}
+
+.product-detail button{
+background:#5a4de0;
+border:1px solid #7363ff;
+padding:14px 24px;
+font-size:16px;
+font-weight:600;
+border-radius:4px;
+cursor:pointer;
+width:200px;
+color:#fff
+}
+
+.product-detail button:hover{
+background:#7363ff
+}
+
+@media(max-width:900px){
+.product-detail{
+grid-template-columns:1fr
+}
+.image-section{
+flex-direction:column
+}
+.zoom-preview{
+display:none!important
+}
+.image-wrapper{
+width:100%;
+height:320px
+}
+}
+select{
+width:220px;
+padding:10px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:4px;
+font-size:14px
+}
+.qty-box{
+display:flex;
+align-items:center;
+gap:8px;
+margin:20px 0
+}
+
+.qty-box button{
+width:38px;
+height:38px;
+border:1px solid #ddd;
+background:#5a4de0;
+padding: 2px;
+font-size:18px;
+font-weight:600;
+cursor:pointer;
+border-radius:4px;
+transition:.2s
+}
+
+.qty-box button:hover{
+background:#7363ff;
+color:#fff;
+border-color:#7363ff
+}
+
+.qty-box button:active{
+transform:scale(.95)
+}
+
+.qty-box input{
+width:55px;
+height:38px;
+text-align:center;
+border:1px solid #ddd;
+border-radius:4px;
+font-size:15px;
+font-weight:600;
+background:#fff
+}
+.toast{
+position:fixed;
+bottom:30px;
+right:30px;
+background:#5a4de0;
+color:#fff;
+padding:14px 22px;
+border-radius:8px;
+font-weight:600;
+opacity:0;
+transform:translateY(20px);
+transition:.35s ease;
+z-index:9999;
+box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
+
+.toast.show{
+opacity:1;
+transform:translateY(0);
+}
+#priceline {
+  display: inline-flex;
+  align-items: baseline;  
+  gap: 6px;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+#totalPrice {
+  font-size: 28px;
+  font-weight: 700;
+  color: green;
+}
+.price-cart-box {
+  display: flex;
+  flex-direction: column;  
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+#addCartBtn {
+  width: 220px;
+}
+
+
+</style>
 <body>
-    <div class="container">
-       
-    </div>
+
+<div class="container">
+    <p>Loading product...</p>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+const product = JSON.parse(localStorage.getItem("selected_product"))
+const fromCart = localStorage.getItem("from_cart")
+if(!product){
+document.querySelector(".container").innerHTML="<p>No product selected</p>"
+return
+}
+
+let variationHTML = ""
+let selectedOption1 = ""
+let selectedOption2 = ""
+
+if(product.category.includes("clothing")){
+variationHTML = `
+<h3>Size</h3>
+<select id="option1">
+<option value="">Select Size</option>
+<option>S</option>
+<option>M</option>
+<option>L</option>
+<option>XL</option>
+</select>
+
+<h3>Color</h3>
+<select id="option2">
+<option value="">Select Color</option>
+<option>Black</option>
+<option>Blue</option>
+<option>White</option>
+<option disabled>Red (Out of Stock)</option>
+</select>
+`
+}
+else if(product.category === "jewelery"){
+variationHTML = `
+<h3>Metal Type</h3>
+<select id="option1">
+<option value="">Select Metal</option>
+<option>Gold</option>
+<option>Silver</option>
+<option>Platinum</option>
+</select>
+
+<h3>Ring Size</h3>
+<select id="option2">
+<option value="">Select Size</option>
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+</select>
+`
+}
+else if(product.category === "electronics"){
+variationHTML = `
+<h3>Storage</h3>
+<select id="option1">
+<option value="">Select Storage</option>
+<option>64GB</option>
+<option>128GB</option>
+<option>256GB</option>
+</select>
+
+<h3>Warranty</h3>
+<select id="option2">
+<option value="">Select Warranty</option>
+<option>1 Year</option>
+<option>2 Years</option>
+</select>
+`
+}
+
+let quantity = 1
+const maxQty = 5
+const basePrice = product.price
+
+document.querySelector(".container").innerHTML=`
+<div class="product-detail">
+
+<div class="image-section">
+<div class="image-wrapper">
+<img id="productImage" src="${product.image}">
+<div class="lens" id="lens"></div>
+</div>
+<div class="zoom-preview" id="zoomPreview"></div>
+</div>
+
+<div class="product-info">
+<h1>${product.title}</h1>
+<p>${product.description}</p>
+
+${variationHTML}
+
+<h3>Quantity</h3>
+<div class="qty-box">
+<button id="minus">−</button>
+<input type="text" id="qtyInput" value="1" >
+<button id="plus">+</button>
+</div>
+
+<div class="price-cart-box">
+
+  <h2 id="priceline">
+    Total: $<span id="totalPrice">${basePrice}</span>
+  </h2>
+
+  <button id="addCartBtn">Add To Cart</button>
+
+</div>
+<div id="toast" class="toast"></div>
+</div>
+`
+
+const img=document.getElementById("productImage")
+const lens=document.getElementById("lens")
+const preview=document.getElementById("zoomPreview")
+const zoomLevel=3
+
+function initZoom(){
+const rect=img.getBoundingClientRect()
+preview.style.backgroundImage=`url('${img.src}')`
+preview.style.backgroundSize=`${rect.width*zoomLevel}px ${rect.height*zoomLevel}px`
+}
+
+function move(e){
+e.preventDefault()
+const rect=img.getBoundingClientRect()
+
+let x=(e.clientX-rect.left)-lens.offsetWidth/2
+let y=(e.clientY-rect.top)-lens.offsetHeight/2
+
+if(x<0)x=0
+if(y<0)y=0
+if(x>rect.width-lens.offsetWidth)x=rect.width-lens.offsetWidth
+if(y>rect.height-lens.offsetHeight)y=rect.height-lens.offsetHeight
+
+lens.style.left=x+"px"
+lens.style.top=y+"px"
+
+preview.style.backgroundPosition=`-${x*zoomLevel}px -${y*zoomLevel}px`
+}
+
+const productDetail = document.querySelector(".product-detail")
+
+img.addEventListener("mouseenter",()=>{
+    lens.style.display="block"
+    preview.style.display="block"
+    productDetail.classList.add("zoom-active")
+    initZoom()
+})
+
+img.addEventListener("mousemove",move)
+
+img.addEventListener("mouseleave",()=>{
+    lens.style.display="none"
+    preview.style.display="none"
+    productDetail.classList.remove("zoom-active")
+})
+
+const option1=document.getElementById("option1")
+const option2=document.getElementById("option2")
+
+if(option1) option1.onchange=e=>selectedOption1=e.target.value
+if(option2) option2.onchange=e=>selectedOption2=e.target.value
+if(fromCart === "true"){
+
+    if(product.option1 && option1){
+        option1.value = product.option1
+        selectedOption1 = product.option1
+    }
+
+    if(product.option2 && option2){
+        option2.value = product.option2
+        selectedOption2 = product.option2
+    }
+
+    if(product.quantity){
+        quantity = product.quantity
+        document.getElementById("qtyInput").value = quantity
+    }
+
+    localStorage.removeItem("from_cart")
+}
+
+const qtyInput=document.getElementById("qtyInput")
+const totalPrice=document.getElementById("totalPrice")
+
+function updatePrice(){
+totalPrice.innerText=(basePrice*quantity).toFixed(2)
+}
+
+document.getElementById("plus").onclick=()=>{
+if(quantity<maxQty){
+quantity++
+qtyInput.value=quantity
+updatePrice()
+}
+}
+
+document.getElementById("minus").onclick=()=>{
+if(quantity>1){
+quantity--
+qtyInput.value=quantity
+updatePrice()
+}
+}
+
+document.getElementById("addCartBtn").onclick = () => {
+
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+
+    const qty = parseInt(document.getElementById("qtyInput").value) || 1
+
+    const existingIndex = cart_items.findIndex(item =>
+        item.id === product.id &&
+        (item.option1 || "") === (selectedOption1 || "") &&
+        (item.option2 || "") === (selectedOption2 || "")
+    )
+
+    if (existingIndex > -1) {
+        cart_items[existingIndex].quantity =
+            (parseInt(cart_items[existingIndex].quantity) || 1) + qty
+    } else {
+        cart_items.push({
+            ...product,
+            option1: selectedOption1 || "",
+            option2: selectedOption2 || "",
+            quantity: qty
+        })
+    }
+
+    localStorage.setItem("cart_items", JSON.stringify(cart_items))
+    showToast("Product Added To Cart ✓")
+    updateCartCount()
+}
+updatePrice()})
+
+</script>
+
+
+
 </body>
 </html>

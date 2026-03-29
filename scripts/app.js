@@ -18,57 +18,187 @@ fetch('https://fakestoreapi.com/products')
         });
 let all_item_ids=[]
 let all_items=[]
-function addToCart(id){
-        alert(id + " added to cart");
-        mydata.forEach(element=>{
-            if(element.id==id){
-                all_items.push(element);
-                all_item_ids.push(id);
-                console.log(all_items);
-                console.log(all_item_ids);
-            }
-            
-        });
-        localStorage.setItem("cart_items", JSON.stringify(all_items));
-}
+function addToCart(id, goToCart = false) {
 
-function viewCart(){
-    if(localStorage.getItem("cart_items")===null){
-        document.getElementById("cart-items").innerHTML="No items in cart";
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+    const product = mydata.find(item => item.id == id)
+
+    if (!product) return
+
+    const option1 = ""
+    const option2 = ""
+    const quantity = 1
+
+    const existingIndex = cart_items.findIndex(item =>
+        item.id === product.id &&
+        (item.option1 || "") === option1 &&
+        (item.option2 || "") === option2
+    )
+
+    if (existingIndex > -1) {
+        cart_items[existingIndex].quantity =
+            (parseInt(cart_items[existingIndex].quantity) || 1) + quantity
+    } else {
+        cart_items.push({
+            ...product,
+            option1,
+            option2,
+            quantity
+        })
     }
-    else{
-        let cart_items=JSON.parse(localStorage.getItem("cart_items"));
-       console.log(cart_items);
-        let cart_html="";
-        let order=0;
-        cart_items.forEach(item => {
-            cart_html +=`
-            <li class=${order}>
-            <div class="cart-item">
-                    <img src="${item.image}" alt="${item.title}">
-                    <h2>${item.title}</h2>
-                    <span><span>Price:</span style="color:black"> $${item.price}</span>
-                    <button id=${item.id} onClick='removeFromCart(${item.id})'>Remove</button>
-                </div>
-            </li>
-            `;
-            order++;
-        });
-        document.getElementById("cart-items").innerHTML = cart_html;
+
+    localStorage.setItem("cart_items", JSON.stringify(cart_items))
+    updateCartCount()
+
+    if (goToCart) {
+        window.location.href = "cart.html"
     }
 }
 
-function removeFromCart(id) {
-    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || [];
-    const index = cart_items.findIndex(item => item.id == id);
-    if (index > -1) {
-        cart_items.splice(index, 1);
-    }
+function viewCart() {
+    const cartContainer = document.getElementById("cart-items")
+    const totalElement = document.getElementById("cart-total")
+    const checkoutBtn = document.getElementById("checkout-btn")
+
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
 
     if (cart_items.length === 0) {
-        localStorage.removeItem("cart_items");
-    } else {
-        localStorage.setItem("cart_items", JSON.stringify(cart_items));
+        cartContainer.innerHTML = "<p>Your cart is empty</p>"
+        if (totalElement) totalElement.innerText = "0.00"
+        if (checkoutBtn) checkoutBtn.disabled = true
+        return
     }
-    viewCart();
+
+    if (checkoutBtn) checkoutBtn.disabled = false
+
+    let total = 0
+    let html = ""
+
+    cart_items.forEach((item, index) => {
+        const quantity = parseInt(item.quantity) || 1
+        const itemTotal = item.price * quantity
+        total += itemTotal
+
+        html += `
+        <div class="cart-item">
+            <div class="cart-left" onclick='openProductFromCart(${index})'>
+                <img src="${item.image}" width="80">
+                <div>
+                    <h3>${item.title}</h3>
+                    ${item.option1 ? `<p>${item.option1}</p>` : ``}
+                    ${item.option2 ? `<p>${item.option2}</p>` : ``}
+                    <p>$${item.price}</p>
+                </div>
+            </div>
+
+            <div class="cart-right">
+                <div class="qty-control">
+                    <button onclick="changeQty(${index}, -1)">−</button>
+                    <span>${quantity}</span>
+                    <button onclick="changeQty(${index}, 1)">+</button>
+                </div>
+                <p>$${itemTotal.toFixed(2)}</p>
+                <button class="remove-btn" onclick="removeFromCartByIndex(${index})">Remove</button>
+            </div>
+        </div>
+        `
+    })
+
+    cartContainer.innerHTML = html
+    if (totalElement) totalElement.innerText = total.toFixed(2)
+    updateCartCount()
 }
+
+function openProductFromCart(index){
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+    let product = cart_items[index]
+
+    localStorage.setItem("selected_product", JSON.stringify(product))
+    localStorage.setItem("from_cart", "true")
+
+    window.location.href = "productdetailpage.html"
+}
+
+function removeFromCartByIndex(index) {
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+
+    cart_items.splice(index, 1)
+
+    if (cart_items.length === 0) {
+        localStorage.removeItem("cart_items")
+    } else {
+        localStorage.setItem("cart_items", JSON.stringify(cart_items))
+    }
+
+    viewCart()
+}
+function changeQty(index, change) {
+    let cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+
+    if (!cart_items[index]) return
+
+    let newQty = (parseInt(cart_items[index].quantity) || 1) + change
+
+    if (newQty < 1) return
+
+    cart_items[index].quantity = newQty
+
+    localStorage.setItem("cart_items", JSON.stringify(cart_items))
+    viewCart()
+}   
+function getProductDetails(productId) {
+            const product = mydata.find(item => item.id == productId);
+            if (product) {
+                document.querySelector('.container').innerHTML = `
+                    <div class="product-detail">
+                        <img src="${product.image}" alt="${product.title}" loading="lazy">
+                        <h1>${product.title}</h1>
+                        <p>${product.description}</p>
+                        <span>$${product.price}</span>
+                        <button id=${product.id} onClick='addToCart(${product.id})'>Add to Cart</button>
+                    </div>
+                `;
+            } else {
+                document.querySelector('.container').innerHTML = `<p>Product not found.</p>`;
+            }
+        }
+    function updateCartCount(){
+    const countElement = document.getElementById("cart-count")
+    if(!countElement) return
+
+    const cart_items = JSON.parse(localStorage.getItem("cart_items")) || []
+    countElement.innerText = cart_items.length
+        countElement.classList.add("bump")
+    setTimeout(()=>{
+        countElement.classList.remove("bump")
+    },300)
+}
+document.addEventListener("DOMContentLoaded", ()=>{
+    updateCartCount()
+})
+function showToast(message="Added to cart ✓"){
+    const toast = document.getElementById("toast")
+    if(!toast) return
+    toast.innerText = message
+    toast.classList.add("show")
+
+    setTimeout(()=>{
+        toast.classList.remove("show")
+    },2000)
+}
+function showToast(message){
+    const toast = document.getElementById("toast")
+    if(!toast) return
+
+    toast.innerText = message
+    toast.classList.add("show")
+
+    setTimeout(()=>{
+        toast.classList.remove("show")
+    },2000)
+}
+document.addEventListener("DOMContentLoaded", () => {
+    if (document.getElementById("cart-items")) {
+        viewCart()
+    }
+})

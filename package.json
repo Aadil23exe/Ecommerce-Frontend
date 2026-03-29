@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/Aadil23exe/Ecommerce-Frontend/issues"
   },
-  "homepage": "https://github.com/Aadil23exe/Ecommerce-Frontend#readme"
+  "homepage": "https://github.com/Aadil23exe/Ecommerce-Frontend#readme",
+  "dependencies": {
+    "firebase": "^12.9.0"
+  }
 }

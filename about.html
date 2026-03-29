@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us – E-Commerce Store</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Arial, sans-serif; }
+
+    :root {
+      --primary: #7363ff;
+      --primary-dark: #5a4de0;
+      --accent: #2563eb;
+      --bg: #f2f3f7;
+      --white: #ffffff;
+      --text: #222;
+      --muted: #666;
+      --shadow: 0 6px 18px rgba(0,0,0,0.06);
+      --shadow-hover: 0 10px 28px rgba(115,99,255,0.18);
+    }
+
+    body { background: var(--bg); color: var(--text); }
+
+    /* ── HEADER ── */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 24px; background: var(--white);
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .logo-image { height: 48px; width: auto; object-fit: contain; }
+    .nav { display: flex; gap: 28px; }
+    .nav-element { cursor: pointer; position: relative; }
+    .nav-element p { font-size: 15px; font-weight: 500; color: #333; transition: color .3s; }
+    .nav-element a { text-decoration: none; color: inherit; }
+    .nav-element::after {
+      content: ""; position: absolute; width: 0; height: 2px;
+      background: var(--accent); left: 0; bottom: -6px; transition: width .3s;
+    }
+    .nav-element:hover::after { width: 100%; }
+    .nav-element:hover p { color: var(--accent); }
+    .search-bar {
+      padding: 8px 14px; border-radius: 25px; border: 1px solid #ddd;
+      outline: none; width: 280px; transition: border .3s, box-shadow .3s;
+    }
+    .search-bar:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+    .carticon { font-size: 22px; color: #333; cursor: pointer; transition: color .3s, transform .2s; }
+    .carticon:hover { color: var(--accent); transform: scale(1.1); }
+    .carticon a { color: inherit; text-decoration: none; position: relative; }
+    .cart-badge {
+      position: absolute; top: -8px; right: -10px;
+      background: var(--primary); color: #fff;
+      font-size: 11px; font-weight: 700;
+      width: 18px; height: 18px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hamburger { display: none; font-size: 22px; cursor: pointer; color: #333; }
+    #menu-toggle { display: none; }
+
+    @media (max-width: 768px) {
+      header { flex-wrap: wrap; gap: 10px; }
+      .hamburger { display: block; }
+      .nav {
+        position: absolute; top: 100%; left: 0; width: 100%;
+        background: var(--white); flex-direction: column; align-items: center;
+        gap: 18px; padding: 20px 0; display: none;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        max-height: 0; overflow: hidden; opacity: 0;
+        transition: max-height .3s ease, opacity .3s ease;
+      }
+      .nav.nav-open { display: flex; max-height: 400px; opacity: 1; }
+      .search-bar { width: 100%; }
+    }
+
+    /* ── HERO ── */
+    .about-hero {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--accent) 100%);
+      padding: 90px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .about-hero h1 {
+      font-size: clamp(32px, 5vw, 54px);
+      font-weight: 700; color: #fff;
+      position: relative; margin-bottom: 18px;
+    }
+    .about-hero p {
+      font-size: 18px; color: rgba(255,255,255,0.85);
+      max-width: 560px; margin: 0 auto;
+      line-height: 1.7; position: relative;
+    }
+
+    /* ── MAIN CONTENT ── */
+    .page-content { max-width: 1100px; margin: 0 auto; padding: 60px 20px; }
+
+    /* Mission */
+    .mission-section {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: center; margin-bottom: 72px;
+    }
+    .mission-text h2 {
+      font-size: 30px; font-weight: 700;
+      color: var(--text); margin-bottom: 16px;
+    }
+    .mission-text h2 span { color: var(--primary); }
+    .mission-text p {
+      font-size: 15px; line-height: 1.8;
+      color: var(--muted); margin-bottom: 14px;
+    }
+    .mission-visual {
+      background: linear-gradient(135deg, #f0eeff 0%, #e8f0ff 100%);
+      border-radius: 20px; padding: 48px 36px;
+      text-align: center;
+      border: 1px solid rgba(115,99,255,0.12);
+    }
+    .mission-visual i { font-size: 64px; color: var(--primary); margin-bottom: 20px; display: block; }
+    .mission-visual h3 { font-size: 20px; font-weight: 600; color: var(--text); }
+
+    @media (max-width: 768px) {
+      .mission-section { grid-template-columns: 1fr; }
+    }
+
+    /* Stats */
+    .stats-section { margin-bottom: 72px; }
+    .stats-section h2 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 36px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    .stat-card {
+      background: var(--white); border-radius: 14px;
+      padding: 32px 20px; text-align: center;
+      box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
+    }
+    .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .stat-card .stat-icon { font-size: 30px; color: var(--primary); margin-bottom: 12px; }
+    .stat-card .stat-number { font-size: 36px; font-weight: 800; color: var(--primary-dark); }
+    .stat-card .stat-label { font-size: 14px; color: var(--muted); margin-top: 6px; }
+
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 480px) { .stats-grid { grid-template-columns: 1fr; } }
+
+    /* Values */
+    .values-section { margin-bottom: 72px; }
+    .values-section h2 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 10px; }
+    .values-section .subtitle { text-align: center; color: var(--muted); margin-bottom: 36px; font-size: 15px; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .value-card {
+      background: var(--white); border-radius: 14px; padding: 30px 24px;
+      box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
+      border-top: 4px solid transparent;
+    }
+    .value-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-top-color: var(--primary); }
+    .value-card i { font-size: 28px; color: var(--primary); margin-bottom: 14px; display: block; }
+    .value-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 10px; }
+    .value-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    @media (max-width: 768px) { .values-grid { grid-template-columns: 1fr; } }
+
+    /* Team */
+    .team-section { margin-bottom: 72px; }
+    .team-section h2 { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 10px; }
+    .team-section .subtitle { text-align: center; color: var(--muted); margin-bottom: 36px; font-size: 15px; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .team-card {
+      background: var(--white); border-radius: 14px; padding: 32px 20px;
+      text-align: center; box-shadow: var(--shadow);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+    .team-avatar {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: white; font-weight: 700;
+    }
+    .team-card h3 { font-size: 17px; font-weight: 600; margin-bottom: 6px; }
+    .team-card .role { font-size: 13px; color: var(--primary); font-weight: 600; margin-bottom: 12px; }
+    .team-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    @media (max-width: 768px) { .team-grid { grid-template-columns: 1fr; } }
+
+    /* CTA */
+    .cta-section {
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      border-radius: 20px; padding: 56px 40px;
+      text-align: center; color: white;
+    }
+    .cta-section h2 { font-size: 28px; font-weight: 700; margin-bottom: 14px; }
+    .cta-section p { font-size: 16px; opacity: .85; margin-bottom: 28px; }
+    .cta-section a {
+      display: inline-block; background: white; color: var(--primary-dark);
+      padding: 14px 32px; border-radius: 8px;
+      font-weight: 700; text-decoration: none; font-size: 15px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .cta-section a:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 28px 20px;
+      color: var(--muted); font-size: 13px;
+      border-top: 1px solid #e5e7eb;
+      margin-top: 0;
+    }
+
+    /* Counter animation */
+    .stat-number { transition: all .5s; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <img src="assets/logo.webp" alt="Store Logo" class="logo-image" loading="lazy">
+  </div>
+  <input type="checkbox" id="menu-toggle">
+  <label for="menu-toggle" class="hamburger"><i class="fa-solid fa-bars"></i></label>
+  <div class="nav" id="mainNav">
+    <div class="nav-element"><p><a href="index.html">Home</a></p></div>
+    <div class="nav-element"><p><a href="products.html">Products</a></p></div>
+    <div class="nav-element"><p><a href="about.html">About</a></p></div>
+    <div class="nav-element"><p><a href="contact.html">Contact</a></p></div>
+  </div>
+  <form><input type="search" placeholder="Search products..." class="search-bar"></form>
+  <div class="carticon">
+    <a href="cart.html" class="cart-link">
+      <i class="fa-solid fa-cart-arrow-down"></i>
+      <span id="cart-count" class="cart-badge">0</span>
+    </a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="about-hero">
+  <h1>About Our Store</h1>
+  <p>We believe great shopping should be effortless — quality products, honest prices, and a seamless experience from browse to doorstep.</p>
+</section>
+
+<div class="page-content">
+
+  <!-- MISSION -->
+  <section class="mission-section">
+    <div class="mission-text">
+      <h2>Our <span>Mission</span></h2>
+      <p>Founded with a passion for connecting people with products they love, we set out to build an online store that puts customers first — always.</p>
+      <p>From carefully curated electronics and apparel to stunning jewelry and accessories, every item in our catalogue is chosen to deliver real value. We partner with trusted suppliers to ensure quality you can count on.</p>
+      <p>Our goal is simple: make your shopping experience feel personal, fast, and genuinely enjoyable.</p>
+    </div>
+    <div class="mission-visual">
+      <i class="fa-solid fa-bag-shopping"></i>
+      <h3>Curated for You</h3>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats-section">
+    <h2>By the Numbers</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+        <div class="stat-number" data-target="25000">0</div>
+        <div class="stat-label">Happy Customers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-box-open"></i></div>
+        <div class="stat-number" data-target="1200">0</div>
+        <div class="stat-label">Products Available</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-star"></i></div>
+        <div class="stat-number" data-target="98">0</div>
+        <div class="stat-label">% Satisfaction Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <div class="stat-number" data-target="50">0</div>
+        <div class="stat-label">Countries Delivered</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <h2>What We Stand For</h2>
+    <p class="subtitle">Our values guide every decision we make.</p>
+    <div class="values-grid">
+      <div class="value-card">
+        <i class="fa-solid fa-shield-halved"></i>
+        <h3>Trust &amp; Transparency</h3>
+        <p>No hidden fees, no surprises. We show you exactly what you're paying for and stand behind every product we sell.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa-solid fa-bolt"></i>
+        <h3>Speed &amp; Reliability</h3>
+        <p>Fast checkout, quick dispatch, and proactive delivery updates — because your time matters as much as your order.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa-solid fa-heart"></i>
+        <h3>Customer First</h3>
+        <p>Our support team is always ready to help. From questions before purchase to returns after delivery, we've got you covered.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa-solid fa-leaf"></i>
+        <h3>Sustainability</h3>
+        <p>We're committed to reducing our environmental footprint through eco-friendly packaging and responsible sourcing partnerships.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa-solid fa-medal"></i>
+        <h3>Quality Assurance</h3>
+        <p>Every product goes through a rigorous review process before it makes it to our catalogue — so you only see the best.</p>
+      </div>
+      <div class="value-card">
+        <i class="fa-solid fa-lock"></i>
+        <h3>Secure Shopping</h3>
+        <p>Bank-grade encryption and Firebase authentication keep your account and payment data safe at every step.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team-section">
+    <h2>Meet the Team</h2>
+    <p class="subtitle">The people who make the magic happen.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">A</div>
+        <h3>Aadil</h3>
+        <div class="role">Founder &amp; Lead Developer</div>
+        <p>Built this store from the ground up with a focus on performance, design, and delightful user experience.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">S</div>
+        <h3>Sara</h3>
+        <div class="role">Product Manager</div>
+        <p>Curates our product catalogue and works directly with suppliers to ensure the highest quality standards.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">R</div>
+        <h3>Riya</h3>
+        <div class="role">Customer Success</div>
+        <p>Our customers' biggest advocate — ensuring every shopping journey ends with a smile.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <h2>Ready to Start Shopping?</h2>
+    <p>Explore thousands of products across electronics, apparel, jewelry and more.</p>
+    <a href="products.html">Browse All Products</a>
+  </section>
+
+</div>
+
+<footer>
+  <p>&copy; 2025 E-Commerce Store. All rights reserved.</p>
+</footer>
+
+<script>
+  // Hamburger toggle
+  document.getElementById('menu-toggle').addEventListener('change', function () {
+    document.getElementById('mainNav').classList.toggle('nav-open', this.checked);
+  });
+
+  // Animated counter
+  function animateCounters() {
+    document.querySelectorAll('.stat-number[data-target]').forEach(el => {
+      const target = parseInt(el.dataset.target);
+      const duration = 1800;
+      const step = target / (duration / 16);
+      let current = 0;
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = Math.floor(current).toLocaleString();
+      }, 16);
+    });
+  }
+
+  // Trigger when stats come into view
+  const statsSection = document.querySelector('.stats-section');
+  const observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) { animateCounters(); observer.disconnect(); }
+  }, { threshold: 0.3 });
+  observer.observe(statsSection);
+
+  // Cart count from localStorage
+  function updateCartCount() {
+    const items = JSON.parse(localStorage.getItem('cart_items')) || [];
+    const total = items.reduce((sum, i) => sum + (parseInt(i.quantity) || 1), 0);
+    document.getElementById('cart-count').textContent = total;
+  }
+  updateCartCount();
+</script>
+</body>
+</html>

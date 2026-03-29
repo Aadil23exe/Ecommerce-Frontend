@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign Up</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif;}
+body{background:#f6f7f9;}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 24px;background:#fff;box-shadow:0 4px 14px rgba(0,0,0,0.06);}
+.logo-image{height:48px;}
+.nav{display:flex;gap:25px;}
+.nav a{text-decoration:none;color:#333;font-weight:500;}
+.nav a:hover{color:#2563eb;}
+.container{max-width:420px;margin:60px auto;background:#fff;padding:30px;border-radius:10px;box-shadow:0 4px 14px rgba(0,0,0,0.06);}
+.container h2{text-align:center;margin-bottom:20px;}
+.input-group{margin-bottom:15px;position:relative;}
+.input-group input{width:100%;padding:10px;border:1px solid #ccc;border-radius:5px;}
+.input-group i{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:#666;}
+.error{font-size:13px;color:red;margin-top:3px;}
+.strength{height:6px;border-radius:5px;margin-top:5px;}
+button{width:100%;padding:10px;background:#7363ff;color:#fff;border:none;border-radius:5px;cursor:pointer;}
+button:hover{background:#5a4de0;}
+.switch{text-align:center;margin-top:15px;font-size:14px;}
+.switch a{color:#2563eb;text-decoration:none;}
+@media(max-width:500px){.container{width:90%;padding:20px;}}
+</style>
+<script type="module">
+
+import { auth } from "./firebase.js";
+import { createUserWithEmailAndPassword } 
+from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+
+window.signup = function () {
+
+  let valid = true;
+
+  const name = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirmPassword").value;
+
+  document.querySelectorAll(".error").forEach(e => e.innerText = "");
+
+  if(name === ""){
+    document.getElementById("nameError").innerText = "Full name required";
+    valid = false;
+  }
+
+  if(password !== confirm){
+    document.getElementById("confirmError").innerText = "Passwords do not match";
+    valid = false;
+  }
+
+  if(password.length < 6){
+    document.getElementById("passError").innerText = "Minimum 6 characters required";
+    valid = false;
+  }
+
+  if(!valid) return;
+
+  createUserWithEmailAndPassword(auth, email, password)
+  .then(() => {
+    alert("Signup Successful!");
+    window.location.href = "login.html";
+  })
+  .catch((error) => {
+    document.getElementById("emailError").innerText = error.message;
+  });
+
+};
+
+</script>
+</head>
+<body>
+
+<header>
+<img src="assets/logo.png" class="logo-image">
+<div class="nav">
+<a href="index.html">Home</a>
+<a href="products.html">Products</a>
+<a href="#">About</a>
+<a href="#">Contact</a>
+</div>
+</header>
+
+<div class="container">
+<h2>Create Account</h2>
+
+<div class="input-group">
+<input type="text" id="fullname" placeholder="Full Name">
+<div class="error" id="nameError"></div>
+</div>
+
+<div class="input-group">
+<input type="email" id="email" placeholder="Email">
+<div class="error" id="emailError"></div>
+</div>
+
+<div class="input-group">
+<input type="password" id="password" placeholder="Password">
+<i class="fa-solid fa-eye" onclick="togglePassword('password',this)"></i>
+<div class="strength" id="strengthBar"></div>
+<div class="error" id="passError"></div>
+</div>
+
+<div class="input-group">
+<input type="password" id="confirmPassword" placeholder="Confirm Password">
+<div class="error" id="confirmError"></div>
+</div>
+
+<button onclick="signup()">Sign Up</button>
+
+<div class="switch">
+Already have an account?
+<a href="login.html">Login</a>
+</div>
+</div>
+
+<script>
+function togglePassword(id,icon){
+const input=document.getElementById(id);
+if(input.type==="password"){input.type="text";icon.classList.replace("fa-eye","fa-eye-slash");}
+else{input.type="password";icon.classList.replace("fa-eye-slash","fa-eye");}
+}
+
+document.getElementById("password").addEventListener("input",function(){
+const value=this.value;
+const bar=document.getElementById("strengthBar");
+let strength=0;
+if(value.length>=8) strength++;
+if(/[A-Z]/.test(value)) strength++;
+if(/[a-z]/.test(value)) strength++;
+if(/[0-9]/.test(value)) strength++;
+if(strength<=1){bar.style.background="red";bar.style.width="25%";}
+else if(strength==2){bar.style.background="orange";bar.style.width="50%";}
+else if(strength==3){bar.style.background="blue";bar.style.width="75%";}
+else{bar.style.background="green";bar.style.width="100%";}
+});
+
+</script>
+
+</body>
+</html>
