@@ -474,3 +474,163 @@ animation:bump .3s ease;
     }
 
 }
+/* --- Responsive Overrides (Paste at the bottom of main.css) --- */
+
+@media (max-width: 1024px) {
+    .herosection {
+        padding: 40px 5%; /* Slightly tighter padding for tablets */
+        min-height: 60vh;
+    }
+    
+    .search-bar {
+        width: 200px; /* Shrink search bar on smaller desktops/tablets */
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header Alignment Fixes */
+    header {
+        padding: 10px 15px;
+        flex-wrap: nowrap; /* Keep logo and icons on one line */
+    }
+
+    .logo-image {
+        height: 35px; /* Scale down logo */
+    }
+
+    .nav {
+        /* This ensures the mobile menu slides over everything */
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: #ffffff;
+        flex-direction: column;
+        gap: 0;
+        padding: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .nav-element {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .nav-element p {
+        padding: 15px 0;
+        margin: 0;
+    }
+
+    .search-bar {
+        display: none; /* Hide search bar on mobile to prevent clutter */
+    }
+
+    .user-auth {
+        gap: 8px;
+    }
+
+    #userEmail {
+        display: none; /* Hide email on mobile to save space, or show just icon */
+    }
+
+    /* Hero Section Mobile Alignment */
+    .herosection {
+        justify-content: center; /* Center content on mobile */
+        text-align: center;
+        padding: 40px 20px;
+        background-position: 70% center; /* Shift background to show subject */
+    }
+
+    .hero-content h1 {
+        font-size: 2.2rem;
+        width: 100%; /* Reset the 56% width from your old CSS */
+    }
+
+    .hero-content p {
+        width: 100%;
+        margin: 0 auto 25px;
+    }
+
+    /* Category Grid Fix */
+    .categories {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .category-card {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-content h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-btn {
+        width: 100%; /* Full width button for easier tapping */
+        text-align: center;
+    }
+}
+@media (max-width: 768px) {
+    /* Ensure the form containing the search bar is visible inside the nav */
+    .nav form {
+        display: block;
+        width: 100%;
+        padding: 15px 20px;
+        order: -1; /* This puts the search bar at the very top of the mobile menu */
+    }
+
+    .nav .search-bar {
+        display: block; /* Overrides the previous 'none' */
+        width: 100%;
+        margin: 0 auto;
+        box-sizing: border-box;
+    }
+    
+    /* Optional: Adjust header layout to prevent overlapping */
+    header {
+        justify-content: space-between;
+        gap: 10px;
+    }
+}
+
+/* --- Mobile Search Bar Fix (Always Visible) --- */
+
+@media (max-width: 768px) {
+    /* 1. Make space for the search bar below the header */
+    header {
+        margin-bottom: 50px; 
+    }
+
+    /* 2. Position the search bar form independently */
+    header form {
+        display: block !important;
+        position: absolute;
+        top: 100%; /* Sits exactly below the white header */
+        left: 0;
+        width: 100%;
+        padding: 10px 15px;
+        background: #ffffff;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        z-index: 90;
+    }
+
+    /* 3. Make the input look clean and full-width */
+    .search-bar {
+        display: block !important;
+        width: 100% !important;
+        margin: 0;
+        background: #f1f3f6; /* Slightly darker to distinguish from header */
+    }
+
+    /* 4. Ensure the navigation menu doesn't overlap the new search bar */
+    .nav {
+        top: calc(100% + 50px) !important; 
+    }
+}
